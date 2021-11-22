@@ -53,7 +53,7 @@ public class LoginPage extends BasePage {
 		passwordBox.clear();
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -62,16 +62,24 @@ public class LoginPage extends BasePage {
 	}
 
 	public String loginPositive(String correctUsername, String correctPassword) {
-		usernameBox.sendKeys(Keys.chord(Keys.COMMAND, "a"), correctUsername);
-		passwordBox.sendKeys(Keys.chord(Keys.COMMAND, "a"), correctPassword);
+		driver.navigate().refresh();
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		loginButton.click();
+		driver.findElement(By.id("user-name")).sendKeys(Keys.chord(Keys.COMMAND, "a"), correctUsername);
+		driver.findElement(By.id("password")).sendKeys(Keys.chord(Keys.COMMAND, "a"), correctPassword);
+
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		driver.findElement(By.id("login-button")).click();
 
 		return driver.getCurrentUrl();
 	}
