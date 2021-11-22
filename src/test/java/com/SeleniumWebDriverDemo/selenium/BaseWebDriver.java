@@ -41,7 +41,7 @@ public class BaseWebDriver {
 	@AfterAll
 	public static void tearDown() {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
