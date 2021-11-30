@@ -18,7 +18,16 @@ public class LoginPageTest extends BaseWebDriver {
 
 	@Test
 	@Order(1)
-	public void loginNegativeTest() {
+	public void loginAssertCorrecPageTitleTEST() {
+		LoginPage loginPage = new LoginPage();
+		String title = loginPage.loginAssertCorrecPageTitle();
+
+		assertEquals("Swag Labs", title);
+	}
+
+	@Test
+	@Order(2)
+	public void loginNegativeTEST() throws Exception {
 		LoginPage loginPage = new LoginPage();
 		String URL = loginPage.loginNegative("incorrect_username", "incorrect_password");
 
@@ -29,10 +38,12 @@ public class LoginPageTest extends BaseWebDriver {
 	}
 
 	@Test
-	@Order(2)
-	public void loginPositiveTest() {
+	@Order(3)
+	public void loginPositiveTEST() {
 		LoginPage loginPage = new LoginPage();
 		String URL = loginPage.loginPositive("performance_glitch_user", "secret_sauce");
+
+		System.out.println("+++ loginPositiveTest URL: " + URL);
 
 		assertEquals("https://www.saucedemo.com/inventory.html", URL, "Unsuccessfully redirected");
 	}

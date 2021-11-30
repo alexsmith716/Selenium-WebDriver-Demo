@@ -5,6 +5,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 //import org.openqa.selenium.ElementNotVisibleException;
 //import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 
 import com.SeleniumWebDriverDemo.utilities.WaitHelper;
 //import com.SeleniumWebDriverDemo.utilities.StoreCookieInfo;
@@ -27,36 +30,39 @@ public class LoginPage extends BasePage {
 		waitHelper = new WaitHelper(driver);
 	}
 
-	public String loginNegative(String incorrectUsername, String incorrectPassword) {
-		driver.manage().deleteAllCookies();
-
+	public void javascriptExecutorClick(WebElement element) throws Exception {
 		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+			if (element.isEnabled() && element.isDisplayed()) {
+				System.out.println("Clicking on element with using java script click");
 
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+			} else {
+				System.out.println("Unable to click on element");
+			}
+		} catch (StaleElementReferenceException e) {
+			System.out.println("Element is not attached to the page document "+ e.getStackTrace());
+		} catch (NoSuchElementException e) {
+			System.out.println("Element was not found in DOM "+ e.getStackTrace());
+		} catch (Exception e) {
+			System.out.println("Unable to click on element "+ e.getStackTrace());
+		}
+	}
+
+	public String loginAssertCorrecPageTitle() {
+		String title = (String) jsExec.executeScript("return document.title");
+		return title;
+	};
+
+	public String loginNegative(String incorrectUsername, String incorrectPassword) throws Exception {
 		usernameBox.sendKeys(incorrectUsername);
 		passwordBox.sendKeys(incorrectPassword);
 
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		loginButton.click();
+		javascriptExecutorClick(loginButton);
 
 		errorMessageContainerError = (errorMessageContainer.getAttribute("class").contains("error-message-container error")) ? true : false;
 
 		usernameBox.clear();
 		passwordBox.clear();
-
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		return driver.getCurrentUrl();
 	}
@@ -64,20 +70,8 @@ public class LoginPage extends BasePage {
 	public String loginPositive(String correctUsername, String correctPassword) {
 		driver.navigate().refresh();
 
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		driver.findElement(By.id("user-name")).sendKeys(Keys.chord(Keys.COMMAND, "a"), correctUsername);
 		driver.findElement(By.id("password")).sendKeys(Keys.chord(Keys.COMMAND, "a"), correctPassword);
-
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		driver.findElement(By.id("login-button")).click();
 
