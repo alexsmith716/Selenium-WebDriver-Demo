@@ -25,7 +25,8 @@ public class LoginPage extends BasePage {
 	private WebElement loginBoxForm = loginBox.findElement(By.tagName("form"));
 	private WebElement errorMessageContainer = loginBoxForm.findElement(By.className("error-message-container"));
 	public boolean errorMessageContainerError;
-
+	private JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+	
 	public LoginPage() {
 		waitHelper = new WaitHelper(driver);
 	}
@@ -35,7 +36,7 @@ public class LoginPage extends BasePage {
 			if (element.isEnabled() && element.isDisplayed()) {
 				System.out.println("Clicking on element with using java script click");
 
-				((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+				(jsExec).executeScript("arguments[0].click();", element);
 			} else {
 				System.out.println("Unable to click on element");
 			}
